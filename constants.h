@@ -3,7 +3,7 @@
 
 #include "SDL_Plotter.h"
 
-const double STEP_SIZE = 0.02;
+const double STEP_SIZE = 0.01;
 const int COL = 750;
 const int ROW = 750;
 const double PI = 3.141592653589793;

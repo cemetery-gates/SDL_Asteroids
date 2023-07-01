@@ -17,7 +17,7 @@ int main(int argc, char ** argv)
     color c;
     int size;
     Uint32 RGB;
-    rocket ship;
+    Rocket ship;
 
 
     vector<int> rocket_x(4), rocket_y(4);
