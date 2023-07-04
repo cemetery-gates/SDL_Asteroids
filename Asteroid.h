@@ -10,6 +10,7 @@
 #include "point.h"
 #include "graphics.h"
 #include "force.h"
+#include "collision.h"
 
 class Asteroid {
 private:
@@ -18,6 +19,7 @@ private:
 	vector<vector<point_t>> shapes;
 	vector<point_t> shape;
 	force f;
+	Boundary bounds;
 	double direction;
 
 public:
@@ -27,6 +29,7 @@ public:
     void erase(SDL_Plotter& g);
     void setDirection(double d);
     double getDirection() const;
+    Boundary getBoundary();
 
 };
 

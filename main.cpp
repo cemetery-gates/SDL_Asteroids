@@ -2,6 +2,7 @@
 #include <cmath>
 
 #include "point.h"
+#include "collision.h"
 #include "rocket.h"
 #include "SDL_Plotter.h"
 #include "graphics.h"
@@ -13,8 +14,7 @@
 
 using namespace std;
 
-int main(int argc, char ** argv)
-{
+int main(int argc, char ** argv){
     srand(time(0));
     SDL_Plotter g(COL,ROW);
     point p;
@@ -31,24 +31,28 @@ int main(int argc, char ** argv)
 
     g.clear();
 
-    while (!g.getQuit())
-    {
+    while (!g.getQuit()) {
 
-		if(g.kbhit()){
-			switch(toupper(g.getKey())){
-				case 'C': g.clear();
-				          break;
-				case 'W':
-                case UP_ARROW: ship.thrust();
-                               break;
-                case 'A':
-                case LEFT_ARROW: ship.rotatePolygonAtDistance(-0.0628*2.5);
-                               break;
-                case 'D':
-                case RIGHT_ARROW: ship.rotatePolygonAtDistance(0.0628*2.5);
-                                break;
-			}
-		}
+    	// Utilize SDL2 directly as there is no method in plotter
+    	// For detecting a key being held but rather only when
+    	// it's hit
+        const Uint8* state = SDL_GetKeyboardState(NULL);
+
+        if(state[SDL_SCANCODE_W] || state[SDL_SCANCODE_UP]) {
+            ship.thrust();
+        }
+
+        if(state[SDL_SCANCODE_A] || state[SDL_SCANCODE_LEFT]) {
+            ship.rotatePolygonAtDistance(-0.031415);
+        }
+
+        if(state[SDL_SCANCODE_D] || state[SDL_SCANCODE_RIGHT]) {
+            ship.rotatePolygonAtDistance(0.031415);
+        }
+
+        if(state[SDL_SCANCODE_C]) {
+            g.clear();
+        }
 
 		g.clear();
 	    for (Asteroid& asteroid : asteroids) {
@@ -56,11 +60,21 @@ int main(int argc, char ** argv)
 	        asteroid.move();
 	        asteroid.draw(g);
 	    }
+
+	    //Check collisions
+	    for(Asteroid& asteroid : asteroids) {
+	    	if(isColliding(ship.getBoundary(), asteroid.getBoundary())){
+	    		cout << "Collision DETECTED!" << endl;
+	    	}
+
+	    	//Another loop will be needed here once bullets work!
+	    }
+
 	    ship.move();
 	    ship.draw(g);
-        g.update();
+	    g.update();
 
-    }
+    	}
+
     return 0;
-
 }

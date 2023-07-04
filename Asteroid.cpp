@@ -69,6 +69,10 @@ Asteroid::Asteroid(double direction) {
     this->direction = direction;
 
     f = force(0.02, getDirection());
+
+    //FIXME CIRCLE NOT IN RIGHT SPOT
+    bounds = Boundary(this->loc, 10.0);
+
 }
 // Draws an asteroid on the screen
 void Asteroid::draw(SDL_Plotter& g){
@@ -84,6 +88,7 @@ void Asteroid::erase(SDL_Plotter& g){
 void Asteroid::move() {
 	double newX = loc.getX() + f.getMagnitude() * cos(f.getDirection());
 	double newY = loc.getY() + f.getMagnitude() * sin(f.getDirection());
+
 
 	// Wrap screen if it falls off the screen
 	if(newX < 0) {
@@ -102,6 +107,7 @@ void Asteroid::move() {
 
 	loc.setX(newX);
 	loc.setY(newY);
+	bounds.setCenter(newX, newY);
 }
 // Set the direction of the asteroid
 void Asteroid::setDirection(double d){
@@ -111,5 +117,9 @@ void Asteroid::setDirection(double d){
 // Get the direction of the asteroid
 double Asteroid::getDirection() const{
 	return direction;
+}
+
+Boundary Asteroid::getBoundary(){
+	return bounds;
 }
 

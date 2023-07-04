@@ -10,6 +10,7 @@ Rocket::Rocket(){
             loc.setX(ROW/2);
             loc.setY(COL/2);
             c = color(255,255,255);
+            bounds = Boundary(this->loc, 15.0);
 }
 
 void Rocket::draw(SDL_Plotter& g){
@@ -30,7 +31,7 @@ double Rocket::getDirection() const{
 }
 
 void Rocket::thrust(){
-	force tForce(0.01, getDirection());
+	force tForce(STEP_SIZE, getDirection());
 	f.apply(tForce);
 }
 
@@ -54,6 +55,7 @@ void Rocket::move(){
 
 	loc.setX(newX);
 	loc.setY(newY);
+	bounds.setCenter(newX, newY);
 }
 
 void Rocket::rotatePolygonAtDistance(double theta) {
@@ -88,4 +90,8 @@ void Rocket::rotatePolygon(double theta) {
 		shape[i].setY(x * sin(theta) + y * cos(theta));
 
 	}
+}
+
+Boundary Rocket::getBoundary(){
+	return bounds;
 }
