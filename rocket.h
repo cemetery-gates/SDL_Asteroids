@@ -10,6 +10,7 @@ using namespace std;
 #include "SDL_Plotter.h"
 #include "constants.h"
 #include "graphics.h"
+#include "collision.h"
 
 
 class Rocket{
@@ -18,6 +19,7 @@ class Rocket{
         force f;
         color c;
         vector<point_t> shape;
+        Boundary bounds;
         double direction = 0;
 
     public:
@@ -29,10 +31,12 @@ class Rocket{
         void setDirection(double d);
         double getDirection() const;
         void thrust();
+        void decelerate();
         void move();
         void rotatePolygonAtDistance(double theta);
 		void translatePolygon(double dx, double dy);
 		void rotatePolygon(double theta);
+		Boundary getBoundary();
 };
 
 #endif // ROCKET_H_INCLUDED
