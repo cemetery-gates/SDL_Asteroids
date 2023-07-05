@@ -10,11 +10,14 @@ Rocket::Rocket(){
             loc.setX(ROW/2);
             loc.setY(COL/2);
             c = color(255,255,255);
-            bounds = Boundary(this->loc, 15.0);
+            bounds = Boundary(this->center, 15.0);
 }
 
 void Rocket::draw(SDL_Plotter& g){
 	drawPoly(loc, shape, c, g);
+	// DEBUGGING ONLY DELETE BEFORE GAME RELEASE
+	 g.drawCircle(bounds.getCenter().getX(), bounds.getCenter().getY(),
+			 bounds.getRadius(),color(255, 0, 0));
 }
 
 void Rocket::erase(SDL_Plotter& g){
@@ -23,7 +26,6 @@ void Rocket::erase(SDL_Plotter& g){
 
 void Rocket::setDirection(double d){
 	direction = d;
-	//rotatePolygonAtDistance(direction);
 }
 
 double Rocket::getDirection() const{
@@ -55,7 +57,7 @@ void Rocket::move(){
 
 	loc.setX(newX);
 	loc.setY(newY);
-	bounds.setCenter(newX, newY);
+	bounds.setCenter(newX + center.getX(), newY + center.getY());
 }
 
 void Rocket::rotatePolygonAtDistance(double theta) {

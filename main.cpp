@@ -1,6 +1,6 @@
 #include <iostream>
 #include <cmath>
-
+#include <utility>
 #include "point.h"
 #include "collision.h"
 #include "rocket.h"
@@ -20,13 +20,19 @@ int main(int argc, char ** argv){
     point p;
     color c;
     Rocket ship;
-    Asteroid a1, a2, a3, a4, a5;
-    vector<Asteroid> asteroids{
-        Asteroid((2 * M_PI) * (rand() / static_cast<double>(RAND_MAX))),
-        Asteroid((2 * M_PI) * (rand() / static_cast<double>(RAND_MAX))),
-        Asteroid((2 * M_PI) * (rand() / static_cast<double>(RAND_MAX))),
-        Asteroid((2 * M_PI) * (rand() / static_cast<double>(RAND_MAX))),
-        Asteroid((2 * M_PI) * (rand() / static_cast<double>(RAND_MAX)))
+    //Initialize vector with 5 Large asteroids to start
+    vector<Asteroid> asteroids {
+        Asteroid(AsteroidSize::LARGE, point_t(rand()%COL+10,rand()%ROW+10),
+        		(2 * M_PI) * (rand() / static_cast<double>(RAND_MAX))),
+		Asteroid(AsteroidSize::LARGE, point_t(rand()%COL+10,rand()%ROW+10),
+				(2 * M_PI) * (rand() / static_cast<double>(RAND_MAX))),
+		Asteroid(AsteroidSize::LARGE, point_t(rand()%COL+10,rand()%ROW+10),
+				(2 * M_PI) * (rand() / static_cast<double>(RAND_MAX))),
+		Asteroid(AsteroidSize::LARGE, point_t(rand()%COL+10,rand()%ROW+10),
+				(2 * M_PI) * (rand() / static_cast<double>(RAND_MAX))),
+		Asteroid(AsteroidSize::LARGE, point_t(rand()%COL+10,rand()%ROW+10),
+				(2 * M_PI) * (rand() / static_cast<double>(RAND_MAX))),
+
     };
 
     g.clear();
@@ -54,27 +60,48 @@ int main(int argc, char ** argv){
             g.clear();
         }
 
-		g.clear();
-	    for (Asteroid& asteroid : asteroids) {
-	    	asteroid.erase(g);
-	        asteroid.move();
-	        asteroid.draw(g);
-	    }
+        g.clear();
 
-	    //Check collisions
-	    for(Asteroid& asteroid : asteroids) {
-	    	if(isColliding(ship.getBoundary(), asteroid.getBoundary())){
-	    		cout << "Collision DETECTED!" << endl;
-	    	}
+        // Move and draw asteroids
+        for (Asteroid& asteroid : asteroids) {
+            asteroid.erase(g);
+            asteroid.move();
+            asteroid.draw(g);
+        }
 
-	    	//Another loop will be needed here once bullets work!
-	    }
+        // Check for collisions and erase asteroid
+        vector<pair<AsteroidSize, point_t>> toMake;
 
-	    ship.move();
-	    ship.draw(g);
-	    g.update();
+        for (auto it = asteroids.begin(); it != asteroids.end(); ) {
+        	//SHIP WILL BE REPLACED WITH A BULLET
+            if(isColliding(ship.getBoundary(), it->getBoundary())) {
+                toMake.push_back({it->getSize(), it->getPosition()});
+                it = asteroids.erase(it);
+            } else {
+                ++it;
+            }
+        }
 
-    	}
+        for (auto const& [size, pos] : toMake) {
+            if(size == AsteroidSize::LARGE) {
+                asteroids.push_back(Asteroid(AsteroidSize::MEDIUM, pos,
+                		(2 * PI) * (rand() / static_cast<double>(RAND_MAX))));
+                asteroids.push_back(Asteroid(AsteroidSize::MEDIUM, pos,
+                		(2 * PI) * (rand() / static_cast<double>(RAND_MAX))));
+            } else if(size == AsteroidSize::MEDIUM) {
+                asteroids.push_back(Asteroid(AsteroidSize::SMALL, pos,
+                		(2 * PI) * (rand() / static_cast<double>(RAND_MAX))));
+                asteroids.push_back(Asteroid(AsteroidSize::SMALL, pos,
+                		(2 * PI) * (rand() / static_cast<double>(RAND_MAX))));
+                asteroids.push_back(Asteroid(AsteroidSize::SMALL, pos,
+                		(2 * PI) * (rand() / static_cast<double>(RAND_MAX))));
+            }
+        }
+
+        ship.move();
+        ship.draw(g);
+        g.update();
+    }
 
     return 0;
 }
