@@ -11,6 +11,8 @@ struct Boundary{
 
     	void setCenter(double x, double y);
     	void setRadius(double r);
+    	point_t getCenter();
+    	double getRadius();
 };
 
 bool isColliding(Boundary, Boundary);

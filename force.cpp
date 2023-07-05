@@ -61,7 +61,17 @@ void force::operator= (const force& f){
 }
 
 void force::apply(const force& f){
-    *this = add(f);
+	    force temp = add(f);
+
+	    //Hard cap for magnitude
+	    double maxMagnitude = 5.0;
+
+	    if(temp.getMagnitude() > maxMagnitude) {
+	        //Limit mag if > than max
+	        temp.setMagnitude(maxMagnitude);
+	    }
+
+	    *this = temp;
 }
 
 void force::display(ostream& output) const{

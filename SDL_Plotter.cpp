@@ -279,3 +279,39 @@ void SDL_Plotter::getMouseLocation(int& x, int& y){
     SDL_GetMouseState( &x, &y );
     cout << x << " " << y << endl;
 }
+
+void SDL_Plotter::drawCircle(int centerX, int centerY, int radius, color c){
+    int p = (5 - radius*4)/4;
+    int x = 0;
+    int y = radius;
+
+    while(x < y){
+        plotPixel(centerX + x, centerY + y, c);
+        plotPixel(centerX - x, centerY + y, c);
+        plotPixel(centerX + x, centerY - y, c);
+        plotPixel(centerX - x, centerY - y, c);
+        plotPixel(centerX + y, centerY + x, c);
+        plotPixel(centerX - y, centerY + x, c);
+        plotPixel(centerX + y, centerY - x, c);
+        plotPixel(centerX - y, centerY - x, c);
+
+        if(p < 0){
+            p += 2*x+1;
+        }else{
+            p += 2*(x-y)+1;
+            y--;
+        }
+        x++;
+    }
+
+    if(x == y){
+        plotPixel(centerX + x, centerY + y, c);
+        plotPixel(centerX - x, centerY + y, c);
+        plotPixel(centerX + x, centerY - y, c);
+        plotPixel(centerX - x, centerY - y, c);
+        plotPixel(centerX + y, centerY + x, c);
+        plotPixel(centerX - y, centerY + x, c);
+        plotPixel(centerX + y, centerY - x, c);
+        plotPixel(centerX - y, centerY - x, c);
+    }
+}

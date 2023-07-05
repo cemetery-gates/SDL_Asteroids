@@ -12,6 +12,12 @@
 #include "force.h"
 #include "collision.h"
 
+enum class AsteroidSize {
+    SMALL,
+    MEDIUM,
+    LARGE
+};
+
 class Asteroid {
 private:
     point_t loc;
@@ -20,18 +26,25 @@ private:
 	vector<point_t> shape;
 	force f;
 	Boundary bounds;
+	bool isDestroyed;
 	double direction;
+	AsteroidSize size;
 
 public:
-	Asteroid(double direction = 0.0);
+	Asteroid(AsteroidSize size, point_t loc, double direction = 0.0);
     void draw(SDL_Plotter& g);
     void move();
     void erase(SDL_Plotter& g);
     void setDirection(double d);
     double getDirection() const;
+    point_t getPosition();
+    AsteroidSize getSize();
     Boundary getBoundary();
+    bool checkDestroyed();
 
 };
+
+vector<point_t> generateAsteroidShape(AsteroidSize size);
 
 #endif /* ASTEROID_H_ */
 

@@ -7,76 +7,40 @@
 
 #include "Asteroid.h"
 
-Asteroid::Asteroid(double direction) {
+Asteroid::Asteroid(AsteroidSize size, point_t loc, double direction) {
 
-	// 5 different shapes of asteroids that can spawn
-    shapes = {
-    		{
-    		    point_t(-10, -20),
-    		    point_t(10, -10),
-    		    point_t(20, 0),
-    		    point_t(10, 10),
-    		    point_t(-10, 20),
-    		    point_t(-20, 0)
-    		},
-			{
-			    point_t(0, -20),
-			    point_t(10, -10),
-			    point_t(20, -5),
-			    point_t(15, 5),
-			    point_t(10, 15),
-			    point_t(0, 20),
-			    point_t(-10, 10),
-			    point_t(-20, 0)
-			},
-			{
-			    point_t(-10, -20),
-			    point_t(0, -15),
-			    point_t(10, -10),
-			    point_t(20, 0),
-			    point_t(10, 10),
-			    point_t(0, 20),
-			    point_t(-20, 15)
-			},
-			{
-			    point_t(-10, -20),
-			    point_t(10, -15),
-			    point_t(20, 0),
-			    point_t(0, 15),
-			    point_t(-20, 10)
-			},
-			{
-			    point_t(-10, -20),
-			    point_t(0, -15),
-			    point_t(10, -10),
-			    point_t(15, 0),
-			    point_t(10, 10),
-			    point_t(0, 20),
-			    point_t(-10, 15),
-			    point_t(-15, 5),
-			    point_t(-20, -5)
-			}
-    };
+	this->size = size;
+	this->direction = direction;
+	this->loc = loc;
+	isDestroyed = false;
 
-    // Pick random shape when spawn
-    shape = shapes[rand() % 5];
-    //Color set to white
-    c = color(255, 255, 255);
-    // Spawn in a random loc on screen
-    loc.setX(rand() % (COL - 20) + 10);
-    loc.setY(rand() % (ROW - 20) + 10);
+	shape = generateAsteroidShape(size);
 
-    this->direction = direction;
-
-    f = force(0.02, getDirection());
-
-    //FIXME CIRCLE NOT IN RIGHT SPOT
-    bounds = Boundary(this->loc, 10.0);
+    switch(size) {
+        case AsteroidSize::LARGE:
+            f = force(0.05, getDirection());
+            c = color(255, 255, 255);
+            bounds = Boundary(loc, 30.0);
+            break;
+        case AsteroidSize::MEDIUM:
+            f = force(0.1, getDirection());
+            c = color(255, 255, 255);
+            bounds = Boundary(loc, 15.0);
+            break;
+        case AsteroidSize::SMALL:
+            f = force(0.15, getDirection());
+            c = color(255, 255, 255);
+            bounds = Boundary(loc, 7.5);
+            break;
+    }
 
 }
 // Draws an asteroid on the screen
 void Asteroid::draw(SDL_Plotter& g){
 	drawPoly(loc, shape, c, g);
+	// DEBUGGING ONLY DELETE BEFORE GAME RELEASE
+	 g.drawCircle(bounds.getCenter().getX(), bounds.getCenter().getY(),
+			 bounds.getRadius(), color(255, 0, 0));
 }
 
 // Erases the asteroid on the screen
@@ -121,5 +85,42 @@ double Asteroid::getDirection() const{
 
 Boundary Asteroid::getBoundary(){
 	return bounds;
+}
+
+point_t Asteroid::getPosition(){
+	return loc;
+}
+AsteroidSize Asteroid::getSize(){
+	return size;
+}
+
+vector<point_t> generateAsteroidShape(AsteroidSize size){
+    vector<point_t> shape;
+    double radius;
+    int numPoints;
+
+    switch (size) {
+    case AsteroidSize::SMALL:
+        radius = 7.5;
+        numPoints = 5 + rand() % 3;
+        break;
+    case AsteroidSize::MEDIUM:
+        radius = 15.0;
+        numPoints = 7 + rand() % 4;
+        break;
+    case AsteroidSize::LARGE:
+        radius = 30.0;
+        numPoints = 10 + rand() % 6;
+        break;
+    }
+
+    //Generate random asteroid shapes
+    for (int i = 0; i < numPoints; ++i) {
+        double theta = (i * 2.0 * PI) / numPoints;
+        double newRadius = radius * (0.75 + ((rand() % 50) / 100.0));
+        shape.push_back(point_t(newRadius * cos(theta), newRadius * sin(theta)));
+    }
+
+    return shape;
 }
 

@@ -142,6 +142,8 @@ public:
     void plotPixel(int x, int y, color=color{});
     void plotPixel(point p, color=color{});
 
+    void drawCircle(int centerX, int centerY, int radius, color c);
+
     void clear();
     int getRow();
     int getCol();
