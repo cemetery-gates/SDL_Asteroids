@@ -47,6 +47,11 @@ int main(int argc, char ** argv){
         if(state[SDL_SCANCODE_W] || state[SDL_SCANCODE_UP]) {
             ship.thrust();
         }
+        //press space key to shoot bullets
+	if (state[SDL_SCANCODE_SPAC]) {
+	    ship.fireBullet(g);
+	}
+	ship.updateBullets(g);
 
         if(state[SDL_SCANCODE_A] || state[SDL_SCANCODE_LEFT]) {
             ship.rotatePolygonAtDistance(-0.031415);
