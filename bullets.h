@@ -6,6 +6,7 @@
 #include "constants.h"
 #include "graphics.h"
 #include "rocket.h"
+#include "Asteroid.h"
 
 class Bullet {
     private:
@@ -22,6 +23,7 @@ class Bullet {
         void move();
         bool isOffScreen() const;
         bool isColliding() const;
+        Boundary getBoundary() const;
 };
 
 
