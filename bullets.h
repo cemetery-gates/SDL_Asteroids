@@ -22,6 +22,7 @@ class Bullet {
         void move();
         bool isOffScreen() const;
         bool isColliding() const;
+        Boundary getBoundary() const;
 };
 
 
