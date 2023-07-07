@@ -47,8 +47,9 @@ int main(int argc, char ** argv){
         if(state[SDL_SCANCODE_W] || state[SDL_SCANCODE_UP]) {
             ship.thrust();
         }
+	//FIXME: add collision mechanic for bullets
         //press space key to shoot bullets
-	if (state[SDL_SCANCODE_SPAC]) {
+	if (state[SDL_SCANCODE_SPACE]) {
 	    ship.fireBullet(g);
 	}
 	ship.updateBullets(g);
