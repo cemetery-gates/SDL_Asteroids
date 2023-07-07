@@ -41,3 +41,7 @@ bool Bullet::isOffScreen() const {
 bool Bullet::isColliding() const {
     return hasCollided;
 }
+
+Boundary Bullet::getBoundary() const{
+    return Boundary(loc, 2);
+}
