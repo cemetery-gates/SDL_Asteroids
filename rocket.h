@@ -8,6 +8,7 @@
 #include "graphics.h"
 #include "collision.h"
 #include "bullets.h"
+#include "Asteroid.h"
 #include <vector>
 using namespace std;
 
@@ -21,7 +22,6 @@ class Rocket{
         vector<point_t> shape;
         Boundary bounds;
         double direction = 0;
-        vector<Bullet> bullets;
 
     public:
         Rocket();
@@ -40,6 +40,8 @@ class Rocket{
 	Boundary getBoundary();
         void fireBullet(SDL_PLOTTER& g);
         void updateBullets(SDL_PLOTTER& g);
+	vector<Bullet> bullets;
+	vector<Asteroid> asteroids;
 };
 
 #endif // ROCKET_H_INCLUDED
