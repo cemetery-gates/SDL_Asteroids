@@ -1,4 +1,6 @@
 #include "rocket.h"
+#include "bullets.h"
+using namespace std;
 
 Rocket::Rocket(){
             shape.push_back(point_t(0,0));
@@ -20,16 +22,46 @@ void Rocket::draw(SDL_Plotter& g){
 			 bounds.getRadius(),color(255, 0, 0));
 }
 
-void Rocket::erase(SDL_Plotter& g){
-	drawPoly(loc, shape, BG, g);
-}
-
 void Rocket::setDirection(double d){
 	direction = d;
 }
 
 double Rocket::getDirection() const{
 	return direction;
+}
+
+//fire bullets function
+void Rocket::fireBullet(SDL_Plotter& g) {
+        if (bullets.size() < 10) {    //load 10 bullets max.
+                Bullet newBullet(loc, this->getDirection());
+                bullets.push_back(newBullet);
+	}
+        //draw bullets
+        for (size_t i = 0; i < bullets.size(); i++) {
+                bullets[i].draw(g);
+	}
+        g.update();
+}
+
+//update bullets function
+void Rocket::updateBullets(SDL_Plotter& g) {
+        for (size_t i = 0; i < bullets.size(); i++) {
+                bullets[i].move();
+                if (bullets[i].isOffScreen() || bullets[i].isColliding {
+                //COLLISION NEEDS TO BE FINISHED
+                        bullets.erase(bullets.begin() + i);
+			i--;
+		}
+	}
+        g.update();
+}
+
+//erase bullets and rocket?
+void Rocket::erase(SDL_Plotter& g){
+	drawPoly(loc, shape, BG, g);
+	for (sizes_t i = 0; i < bullets.size(); i++) {
+		bullets[i].erase(g);
+	}
 }
 
 void Rocket::thrust(){
