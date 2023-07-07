@@ -15,6 +15,7 @@ struct Boundary{
     	double getRadius();
 };
 
-bool isColliding(Boundary, Boundary);
+bool isColliding(const Boundary& b1, const Boundary& b2);
 
 #endif // COLLISION_H
+
