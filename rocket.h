@@ -1,17 +1,17 @@
 #ifndef ROCKET_H_INCLUDED
 #define ROCKET_H_INCLUDED
 
-#include <vector>
-
-using namespace std;
-
 #include "force.h"
 #include "point.h"
 #include "SDL_Plotter.h"
 #include "constants.h"
 #include "graphics.h"
 #include "collision.h"
+#include "bullets.h"
+#include <vector>
+using namespace std;
 
+class Bullet;
 
 class Rocket{
     private:
@@ -21,6 +21,7 @@ class Rocket{
         vector<point_t> shape;
         Boundary bounds;
         double direction = 0;
+        vector<Bullet> bullets;
 
     public:
         Rocket();
@@ -34,9 +35,11 @@ class Rocket{
         void decelerate();
         void move();
         void rotatePolygonAtDistance(double theta);
-		void translatePolygon(double dx, double dy);
-		void rotatePolygon(double theta);
-		Boundary getBoundary();
+        void translatePolygon(double dx, double dy);
+	void rotatePolygon(double theta);
+	Boundary getBoundary();
+        void fireBullet(SDL_PLOTTER& g);
+        void updateBullets(SDL_PLOTTER& g);
 };
 
 #endif // ROCKET_H_INCLUDED
