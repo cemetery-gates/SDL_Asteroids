@@ -4,14 +4,14 @@
 // Takes location, the color, direction,
 Bullet::Bullet(point_t location, double direction) {
     loc = location;
-    f = force(BULLET_SPEED, direction); //changed if bullets are going to fast/slow
+    f = force(6, direction); //changed if bullets are going to fast/slow
     c = color(255, 0, 0);
     offScreen = false;
     hasCollided = false;
 }
 
 void Bullet::draw(SDL_Plotter& g) {
-    g.plotPixel(loc.getX(), loc.getY(), c.R, c.G, c.B);
+    g.plotPixel(loc.getX(), loc.getY(), 255,255,255);
 }
 
 void Bullet::erase(SDL_Plotter& g) {
@@ -32,6 +32,8 @@ void Bullet::move() {
     //if hit asteroid, set hasCollided to true, and have return statement
     loc.setX(newX);
     loc.setY(newY);
+
+
 }
 
 bool Bullet::isOffScreen() const {
@@ -40,4 +42,8 @@ bool Bullet::isOffScreen() const {
 
 bool Bullet::isColliding() const {
     return hasCollided;
+}
+
+Boundary Bullet::getBoundary() const{
+    return Boundary(loc, 2);
 }
