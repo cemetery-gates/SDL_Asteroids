@@ -18,17 +18,17 @@ Asteroid::Asteroid(AsteroidSize size, point_t loc, double direction) {
 
     switch(size) {
         case AsteroidSize::LARGE:
-            f = force(0.05, getDirection());
+            f = force(0.40, getDirection());
             c = color(255, 255, 255);
             bounds = Boundary(loc, 30.0);
             break;
         case AsteroidSize::MEDIUM:
-            f = force(0.1, getDirection());
+            f = force(0.80, getDirection());
             c = color(255, 255, 255);
             bounds = Boundary(loc, 15.0);
             break;
         case AsteroidSize::SMALL:
-            f = force(0.15, getDirection());
+            f = force(1.20, getDirection());
             c = color(255, 255, 255);
             bounds = Boundary(loc, 7.5);
             break;
@@ -39,8 +39,6 @@ Asteroid::Asteroid(AsteroidSize size, point_t loc, double direction) {
 void Asteroid::draw(SDL_Plotter& g){
 	drawPoly(loc, shape, c, g);
 	// DEBUGGING ONLY DELETE BEFORE GAME RELEASE
-	 g.drawCircle(bounds.getCenter().getX(), bounds.getCenter().getY(),
-			 bounds.getRadius(), color(255, 0, 0));
 }
 
 // Erases the asteroid on the screen
@@ -72,6 +70,7 @@ void Asteroid::move() {
 	loc.setX(newX);
 	loc.setY(newY);
 	bounds.setCenter(newX, newY);
+
 }
 // Set the direction of the asteroid
 void Asteroid::setDirection(double d){
@@ -83,7 +82,7 @@ double Asteroid::getDirection() const{
 	return direction;
 }
 
-Boundary Asteroid::getBoundary(){
+Boundary Asteroid::getBoundary() const{
 	return bounds;
 }
 
