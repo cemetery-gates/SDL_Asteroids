@@ -8,7 +8,9 @@
 #include "graphics.h"
 #include "collision.h"
 #include "bullets.h"
+#include "Asteroid.h"
 #include <vector>
+#include <algorithm>
 using namespace std;
 
 class Bullet;
@@ -21,7 +23,7 @@ class Rocket{
         vector<point_t> shape;
         Boundary bounds;
         double direction = 0;
-        vector<Bullet> bullets;
+
 
     public:
         Rocket();
@@ -36,10 +38,13 @@ class Rocket{
         void move();
         void rotatePolygonAtDistance(double theta);
         void translatePolygon(double dx, double dy);
-	void rotatePolygon(double theta);
-	Boundary getBoundary();
-        void fireBullet(SDL_PLOTTER& g);
-        void updateBullets(SDL_PLOTTER& g);
+        void rotatePolygon(double theta);
+        Boundary getBoundary();
+        void fireBullet(SDL_Plotter& g);
+        void updateBullets(SDL_Plotter& g);
+        vector<Bullet> bullets;
+        vector<Asteroid> asteroids;
+
 };
 
 #endif // ROCKET_H_INCLUDED
