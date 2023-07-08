@@ -22,7 +22,7 @@ double Boundary::getRadius(){
 	return radius;
 }
 
-bool isColliding(Boundary b1, Boundary b2){
+bool isColliding(const Boundary b1, const Boundary b2){
 	double squareDistance = pow(b1.center.getX() - b2.center.getX(), 2) +
 	                        pow(b1.center.getY() - b2.center.getY(), 2);
 
