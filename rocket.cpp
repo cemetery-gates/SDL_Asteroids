@@ -1,5 +1,7 @@
 #include "rocket.h"
 #include "bullets.h"
+#include "collision.h"
+#include "Asteroid.h"
 using namespace std;
 
 Rocket::Rocket(){
@@ -18,8 +20,6 @@ Rocket::Rocket(){
 void Rocket::draw(SDL_Plotter& g){
 	drawPoly(loc, shape, c, g);
 	// DEBUGGING ONLY DELETE BEFORE GAME RELEASE
-	 g.drawCircle(bounds.getCenter().getX(), bounds.getCenter().getY(),
-			 bounds.getRadius(),color(255, 0, 0));
 }
 
 void Rocket::setDirection(double d){
@@ -45,21 +45,46 @@ void Rocket::fireBullet(SDL_Plotter& g) {
 
 //update bullets function
 void Rocket::updateBullets(SDL_Plotter& g) {
-        for (size_t i = 0; i < bullets.size(); i++) {
-                bullets[i].move();
-                if (bullets[i].isOffScreen() || bullets[i].isColliding {
-                //COLLISION NEEDS TO BE FINISHED
-                        bullets.erase(bullets.begin() + i);
-			i--;
-		}
-	}
-        g.update();
+    for (size_t i = 0; i < bullets.size(); i++) {
+        bullets[i].move();
+        if (bullets[i].isOffScreen()) {
+            bullets.erase(bullets.begin() + i);
+            i--;
+        } else {
+            // Check for collision with asteroids
+            for (size_t j = 0; j < asteroids.size(); j++) {
+                if (isColliding(bullets[i].getBoundary(), asteroids[j].getBoundary())) {
+                    // Bullet has collided with an asteroid
+                    bullets[i].isColliding();
+                    asteroids.erase(asteroids.begin() + j);
+                    break; // Exit the loop since the bullet can only collide with one asteroid at a time
+                }
+            }
+        }
+    }
+
+    // Draw the bullets
+    for (size_t i = 0; i < bullets.size(); i++) {
+        bullets[i].draw(g);
+    }
+
+    // Draw the asteroids
+    for (size_t i = 0; i < asteroids.size(); i++) {
+        asteroids[i].draw(g);
+    }
+
+    // Remove bullets that have collided with asteroids
+    bullets.erase(remove_if(bullets.begin(), bullets.end(), [](const Bullet& bullet) {
+        return bullet.isColliding();
+    }), bullets.end());
+
+    g.update();
 }
 
 //erase bullets and rocket?
 void Rocket::erase(SDL_Plotter& g){
 	drawPoly(loc, shape, BG, g);
-	for (sizes_t i = 0; i < bullets.size(); i++) {
+	for (size_t i = 0; i < bullets.size(); i++) {
 		bullets[i].erase(g);
 	}
 }
