@@ -122,4 +122,3 @@ vector<point_t> generateAsteroidShape(AsteroidSize size){
 
     return shape;
 }
-

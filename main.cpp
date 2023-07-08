@@ -156,7 +156,7 @@ int main(int argc, char** argv) {
             if (isColliding(asteroid.getBoundary(), ship.getBoundary())) {
                 g.clear();
                 g.update();
-                SDL_Delay(500);  // Pause for 0.5 seconds before exiting
+                SDL_Delay(5000);  // Pause for 0.5 seconds before exiting
                 g.setQuit(true);
                 return 0;
             }
